@@ -11,3 +11,11 @@
 $ ./fsize [-r] [-n num] [directory]
 ```
 
+## Example
+- Without specifying directory, fsize analyze current directory.
+- Path names are colored depending on the file types.
+![current](./screenshots/screenshot_current.png)
+
+- You can specify directory which is to be analyzed.
+![current](./screenshots/screenshot_dir.png)
+
