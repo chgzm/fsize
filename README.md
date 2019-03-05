@@ -1,4 +1,4 @@
-# fsize - command for showing the list of large files in directory with details.
+# fsize - show file size ranking int directory with colors and details.
 - Show the list of large files in the specified directory with details, such as modified time, accessed time, file description.
 - Files are sorted by file size in descending order.
 
@@ -10,6 +10,10 @@
 ```
 $ ./fsize [-r] [-n num] [directory]
 ```
+
+## Dependency
+- This command needs libmagic to get file description. For example,  
+
 
 ## Example
 - Without specifying directory, fsize analyze current directory.

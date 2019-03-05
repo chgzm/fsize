@@ -3,16 +3,29 @@
 
 #include <cstdio>
 #include <unistd.h>
+#include <getopt.h>
+
+static constexpr struct option longopts[] = {
+    { "num",     required_argument, nullptr, 'n' },
+    { "reverse", no_argument,       nullptr, 'r' },
+    { "help",    no_argument,       nullptr, 'r' },
+    { 0,         0,                 0,        0  },
+};
 
 static void usage()
 {
-    std::printf("Usage: fsize [-r] [-n num] [directory]\n");        
+    std::printf(
+        "Usage: fsize [-r] [-n num] [directory]\n"
+        " -n, --num=N    Set number of files displayed\n"
+        " -r, --reverse  Show files in ascending order\n"
+        "\n"
+    );        
 } 
 
 static int parseCommandLine(int argc, char* argv[], fs::CollectorParam& param)
 {
-    int opt = 0; 
-    while ((opt = getopt(argc, argv, ":n:rt")) != -1) {
+    int opt = 0, longIndex = 0;
+    while ((opt = getopt_long(argc, argv, ":n:r", longopts, &longIndex)) != -1) {
         switch (opt) {
         case 'n': { param.numOfLines   = std::stoi(optarg); break; }
         case 'r': { param.reverseFlag  = true;              break; }
