@@ -1,4 +1,4 @@
-PROGRAM := fsize
+PROGRAM := fsrank
 OBJS := Main.o fs/FileStatsCollector.o fs/FileDescriptionLoader.o fs/LsColorsParser.o utils/Time.o utils/Color.o utils/Unit.o
 INCLUDES := -I./utils -I./fs
 CXX := g++
