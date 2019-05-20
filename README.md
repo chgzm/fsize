@@ -1,6 +1,7 @@
-# fsrank - show the file size ranking of specified directory with colors and details.
-- Show the list of large files in the specified directory with details, such as modified time, accessed time, file description.
-- Files are sorted by file size in descending order.
+# fsrank 
+- Show the file size ranking of specified directory with colors and details.
+  - Show the list of large files in the specified directory with details, such as modified time, accessed time, file description.
+  - Files are sorted by file size in descending order.
 
 ## Features 
 - File paths are colored in accordance with LS_COLORS.
@@ -8,8 +9,14 @@
 
 ## Usage
 ```
-$ ./fsrank [-r] [-n num] [directory]
+$ ./fsrank [-r] [-n num] directory
 ```
+
+|Option  | Description                  |
+|--------|------------------------------|
+|-r      | Show files in ascending order|
+|-h      | display help                 |
+
 
 ## Dependency
 - This command needs libmagic to get file description.
