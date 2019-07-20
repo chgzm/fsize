@@ -7,6 +7,18 @@
 - File paths are colored in accordance with LS_COLORS.
 - File type is described by using libmagic.
 
+## Dependency
+- This command needs libmagic to get file description.
+  - Install in Ubuntu
+```
+$ sudo apt install libmagic-dev
+```
+
+## Build
+```
+make
+```
+
 ## Usage
 ```
 $ ./fsrank [-r] [-n num] directory
@@ -17,9 +29,6 @@ $ ./fsrank [-r] [-n num] directory
 |-r      | Show files in ascending order|
 |-h      | display help                 |
 
-
-## Dependency
-- This command needs libmagic to get file description.
 
 ## Example
 - Without specifying directory, fsize analyze current directory.
