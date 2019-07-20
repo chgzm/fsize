@@ -2,8 +2,7 @@
 
 namespace utils {
 
-std::string secToDateTime(int64_t tv_sec)
-{
+std::string secToDateTime(int64_t tv_sec) noexcept {
     struct tm tm;
     ::localtime_r(&(tv_sec), &tm);
 
@@ -17,9 +16,10 @@ std::string secToDateTime(int64_t tv_sec)
         tm.tm_mday,
         tm.tm_hour,
         tm.tm_min,
-        tm.tm_sec);
+        tm.tm_sec
+    );
 
     return buf;
 }
 
-} // namespace utils end
+} // namespace utils

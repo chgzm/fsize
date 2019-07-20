@@ -15,7 +15,7 @@ struct CollectorParam {
 
     std::string dirPath;
     std::size_t numOfLines;
-    bool reverseFlag;
+    bool        reverseFlag;
 };
 
 } // namespace fs end

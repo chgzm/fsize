@@ -2,8 +2,7 @@
 
 namespace utils {
 
-void printWithColor(const std::string& color, const char* format, ...)
-{
+void printWithColor(const std::string& color, const char* format, ...) noexcept {
     va_list args;
     va_start(args, format);
 
@@ -17,5 +16,5 @@ void printWithColor(const std::string& color, const char* format, ...)
     va_end(args);
 }
 
-} // namespace utils end
+} // namespace utils
 

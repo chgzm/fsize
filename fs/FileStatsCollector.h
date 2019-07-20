@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <queue>
+#include <memory>
 #include <string>
 #include <fts.h>
 #include <sys/stat.h>
@@ -30,26 +31,27 @@ enum class FileType : uint8_t {
     UNKNOWN
 };
 
-FileType getFileType(uint32_t mode);
+FileType getFileType(uint32_t mode) noexcept;
 
-const std::string getExtention(const std::string& path);
+const std::string getExtention(const std::string& path) noexcept;
 
 class FileStatsCollector {
 public:
-    inline FileStatsCollector(const CollectorParam* param) : param_(param), fileStatsList_()
-    {
+    inline FileStatsCollector(const CollectorParam* param) 
+      : param_(param), 
+        fileStatsList_() {
         this->fileStatsList_.reserve(4194304);
     }
-    ~FileStatsCollector() {}
+    ~FileStatsCollector() = default;
 
-    int init();
-    int print();
+    int init()  noexcept;
+    int print() noexcept;
 
 private:
-    const CollectorParam* param_;
-    std::vector<FileStats> fileStatsList_;
-    FileDescriptionLoader descLoader_;
-    LsColorsParser lsColorsParser_;
+    const CollectorParam*                   param_;
+    std::vector<std::unique_ptr<FileStats>> fileStatsList_;
+    FileDescriptionLoader                   descLoader_;
+    LsColorsParser                          lsColorsParser_;
 };
 
 } // namespace fs end

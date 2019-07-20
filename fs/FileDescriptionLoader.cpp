@@ -3,14 +3,12 @@
 
 namespace fs {
 
-FileDescriptionLoader::~FileDescriptionLoader()
-{
-    ::magic_close(this->magicCookie_);
+FileDescriptionLoader::~FileDescriptionLoader() {
+    magic_close(this->magicCookie_);
 } 
 
-int FileDescriptionLoader::init(int flags)
-{
-    this->magicCookie_ = ::magic_open(flags);
+int FileDescriptionLoader::init(int flags) noexcept {
+    this->magicCookie_ = magic_open(flags);
     if (this->magicCookie_ == nullptr) {
         std::fprintf(stderr, "magic_open failed\n");
         return -1;
@@ -19,9 +17,8 @@ int FileDescriptionLoader::init(int flags)
     return 0;
 }
 
-int FileDescriptionLoader::getFileDescription(const std::string& path, std::string& desc)
-{
-    if (::magic_load(this->magicCookie_, nullptr)) {
+int FileDescriptionLoader::getFileDescription(const std::string& path, std::string& desc) noexcept {
+    if (magic_load(this->magicCookie_, nullptr)) {
         std::fprintf(stderr, "magic_load failed\n");
         return -1;
     }
@@ -44,5 +41,5 @@ int FileDescriptionLoader::getFileDescription(const std::string& path, std::stri
     return 0;
 }
 
-} // end of namespace fs
+} // namespace fs
 

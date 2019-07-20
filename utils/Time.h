@@ -7,8 +7,8 @@
 
 namespace utils {
 
-std::string secToDateTime(int64_t tv_sec);
+std::string secToDateTime(int64_t tv_sec) noexcept;
 
-} // namespace utils end
+} // namespace utils
 
 #endif

@@ -12,8 +12,7 @@ static constexpr struct option longopts[] = {
     { 0,         0,                 0,        0  },
 };
 
-static void usage()
-{
+static void usage() noexcept {
     std::printf(
         "Usage: fsize [-r] [-n num] [directory]\n"
         " -n, --num=N    Set number of files displayed\n"
@@ -22,8 +21,7 @@ static void usage()
     );        
 } 
 
-static int parseCommandLine(int argc, char* argv[], fs::CollectorParam& param)
-{
+static int parseCommandLine(int argc, char* argv[], fs::CollectorParam& param) noexcept {
     int opt = 0, longIndex = 0;
     while ((opt = getopt_long(argc, argv, ":n:r", longopts, &longIndex)) != -1) {
         switch (opt) {
@@ -45,8 +43,7 @@ static int parseCommandLine(int argc, char* argv[], fs::CollectorParam& param)
     return 0;
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     fs::CollectorParam param;
     if (parseCommandLine(argc, argv, param) != 0) {
         usage();

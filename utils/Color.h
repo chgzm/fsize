@@ -7,8 +7,8 @@
 
 namespace utils {
 
-void printWithColor(const std::string& color, const char* format, ...);
+void printWithColor(const std::string& color, const char* format, ...) noexcept;
 
-} // namespace utils end
+} // namespace utils 
 
 #endif

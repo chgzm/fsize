@@ -7,8 +7,7 @@ namespace utils {
 
 const std::array<std::string, 6> prefix = {"K", "M", "G", "T", "P", "E"};
 
-std::string byteToHumanReadable(std::size_t byte)
-{
+std::string byteToHumanReadable(std::size_t byte) noexcept {
     char buf[16];
     if (byte < UNIT) {
         std::snprintf(buf, sizeof(buf), "%lu", byte);
@@ -22,5 +21,5 @@ std::string byteToHumanReadable(std::size_t byte)
     return buf;
 }
 
-} // namespace utils end
+} // namespace utils
 

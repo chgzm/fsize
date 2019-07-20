@@ -8,13 +8,12 @@ namespace fs {
 
 class LsColorsParser {
 public:
-    LsColorsParser() {}
-    ~LsColorsParser() {}
+    LsColorsParser()  = default;
+    ~LsColorsParser() = default;
 
-    int parse(const std::string& lsColors);
+    int parse(const std::string& lsColors) noexcept;
 
-    inline const std::string& getColorCode(const std::string& fileType)
-    {
+    inline const std::string& getColorCode(const std::string& fileType) noexcept {
         return this->colorMap_[fileType];
     }
 
@@ -22,6 +21,6 @@ private:
     std::unordered_map<std::string, std::string> colorMap_;
 };
 
-} // end of namespace fs
+} // namespace fs
 
 #endif

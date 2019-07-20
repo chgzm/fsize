@@ -11,9 +11,9 @@ public:
     FileDescriptionLoader() : magicCookie_(nullptr) {}
     ~FileDescriptionLoader();
 
-    int init(int flags);
+    int init(int flags) noexcept;
 
-    int getFileDescription(const std::string& path, std::string& desc);
+    int getFileDescription(const std::string& path, std::string& desc) noexcept;
 
 private:
     magic_t magicCookie_;

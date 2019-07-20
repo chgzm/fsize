@@ -14,8 +14,7 @@
 
 namespace fs {
 
-FileType getFileType(uint32_t mode)
-{
+FileType getFileType(uint32_t mode) noexcept {
     if (S_ISREG(mode)) { 
         if      (mode & S_ISUID) { return FileType::SUID; }
         else if (mode & S_ISGID) { return FileType::SGID; }
@@ -31,14 +30,12 @@ FileType getFileType(uint32_t mode)
     else                     { return FileType::UNKNOWN; }
 }
 
-const std::string getExtention(const std::string& path)
-{
+const std::string getExtention(const std::string& path) noexcept {
     const std::size_t lastDotPos = path.find_last_of(".");
     return path.substr(lastDotPos + 1, path.size() - lastDotPos - 1);
 }
 
-int FileStatsCollector::init()
-{
+int FileStatsCollector::init() noexcept {
     char* const paths[] = {const_cast<char*>(this->param_->dirPath.c_str()), nullptr};
     FTS* fts = ::fts_open(paths, 0, nullptr);
     if (fts == nullptr) {
@@ -52,22 +49,24 @@ int FileStatsCollector::init()
             continue;
         }
 
-        FileStats stats(ent->fts_statp->st_size,
-                        ent->fts_statp->st_atim.tv_sec,
-                        ent->fts_statp->st_mtim.tv_sec,
-                        ent->fts_path,
-                        ent->fts_statp->st_mode);
+        auto stats = std::make_unique<FileStats>(
+            ent->fts_statp->st_size,
+            ent->fts_statp->st_atim.tv_sec,
+            ent->fts_statp->st_mtim.tv_sec,
+            ent->fts_path,
+            ent->fts_statp->st_mode
+        );
 
         this->fileStatsList_.push_back(std::move(stats));
     }
 
     if (this->param_->reverseFlag) {
-        std::sort(this->fileStatsList_.begin(), this->fileStatsList_.end(), [](const FileStats& lhs, const FileStats& rhs) {
-            return lhs.fileSize_ < rhs.fileSize_;
+        std::sort(this->fileStatsList_.begin(), this->fileStatsList_.end(), [](std::unique_ptr<FileStats>& lhs, std::unique_ptr<FileStats>& rhs) {
+            return lhs->fileSize_ < rhs->fileSize_;
         });
     } else {
-        std::sort(this->fileStatsList_.begin(), this->fileStatsList_.end(), [](const FileStats& lhs, const FileStats& rhs) {
-            return lhs.fileSize_ > rhs.fileSize_;
+        std::sort(this->fileStatsList_.begin(), this->fileStatsList_.end(), [](std::unique_ptr<FileStats>& lhs, std::unique_ptr<FileStats>& rhs) {
+            return lhs->fileSize_ > rhs->fileSize_;
         });
     }
 
@@ -87,8 +86,7 @@ int FileStatsCollector::init()
     return 0;
 }
 
-int FileStatsCollector::print()
-{
+int FileStatsCollector::print() noexcept {
     const int indexWidth = std::max(2, (int)(std::log10(this->param_->numOfLines) + 1));
 
     struct winsize w;
@@ -107,13 +105,14 @@ int FileStatsCollector::print()
         "Access Time",
         "Modification Time", 
         "File Description",
-        pathWidth, "Path");
+        pathWidth, "Path"
+    );
 
     for (std::size_t i = 0; i < this->fileStatsList_.size(); ++i) {
-        const FileStats& stats = this->fileStatsList_[i];
+        std::unique_ptr<FileStats>& stats = this->fileStatsList_[i];
 
         std::string desc;
-        if (this->descLoader_.getFileDescription(stats.path_, desc) != 0) {
+        if (this->descLoader_.getFileDescription(stats->path_, desc) != 0) {
             std::fprintf(stderr, "getFileDescription failed\n");
             return -1;
         }
@@ -121,16 +120,17 @@ int FileStatsCollector::print()
         std::printf(
             "%*lu  %10s  %-19s  %-19s  %-48s  ", 
             indexWidth, i + 1,
-            utils::byteToHumanReadable(stats.fileSize_).c_str(),
-            utils::secToDateTime(stats.accessTime_).c_str(),
-            utils::secToDateTime(stats.modificationTime_).c_str(),
-            desc.c_str());
+            utils::byteToHumanReadable(stats->fileSize_).c_str(),
+            utils::secToDateTime(stats->accessTime_).c_str(),
+            utils::secToDateTime(stats->modificationTime_).c_str(),
+            desc.c_str()
+        );
 
 
         std::string color;
-        switch (getFileType(stats.mode_)) {
+        switch (getFileType(stats->mode_)) {
         case FileType::FILE: {
-            const std::string ext = getExtention(stats.path_);
+            const std::string ext = getExtention(stats->path_);
             color = this->lsColorsParser_.getColorCode(ext);
             if (color == "") {
                 color = this->lsColorsParser_.getColorCode("no");
@@ -150,7 +150,7 @@ int FileStatsCollector::print()
         default:                { color = this->lsColorsParser_.getColorCode("no"); break; }
         }
 
-        utils::printWithColor(color, "%s\n", stats.path_.c_str());
+        utils::printWithColor(color, "%s\n", stats->path_.c_str());
 
         if (this->param_->numOfLines <= (i + 1)) {
             break;

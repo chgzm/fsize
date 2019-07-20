@@ -5,8 +5,7 @@
 
 namespace fs {
 
-int LsColorsParser::parse(const std::string& lsColors)
-{
+int LsColorsParser::parse(const std::string& lsColors) noexcept {
     std::size_t prev = 0, current = 0;
     while ((current = lsColors.find(":", prev)) != std::string::npos) {
         const std::string kv = lsColors.substr(prev, current - prev);
@@ -30,4 +29,4 @@ int LsColorsParser::parse(const std::string& lsColors)
     return 0;
 }
 
-} // end of namespace fs
+} // namespace fs
